@@ -7,8 +7,45 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'vacations_web',  
+    database: 'vacations_web',
     connectionLimit: 10
+});
+
+//update  vacation
+router.put('/updatevacation', async (req, res, next) => {
+    const id = req.query.id;   ////from client-> in the url?id
+    var queryStr = (`UPDATE vacation 
+    SET description='${req.body.description}',destination='${req.body.destination}',img='${req.body.img}',
+    date='${req.body.date}',price=${req.body.price},follow=${req.body.follow}
+    where ID=${id};`);
+    const result = await pool.query(queryStr);
+    if (result.status = 200) {
+        res.send(result);
+    } else {
+        res.status(404).send('error');
+    }
+});
+
+//insert  vacation
+router.post('/insertvacation', async (req, res, next) => {
+    let queryStr = `INSERT INTO vacation (description,destination,img,date,price,follow)  
+    VALUES ('${req.body.description}','${req.body.destination}','${req.body.img}','${req.body.date}',${req.body.price},${req.body.follow}) `  //from client
+    const result = await pool.query(queryStr);  //queryStr send to DB
+
+    if (result.status = 200) {
+        res.send(result);
+    } else {
+        res.status(404).send('error');
+    }
+});
+
+//delete vacation 
+router.delete('/deletevacation', async (req, res) => {
+    const id = req.query.id;   ////from client-> in the url?id
+    await pool.query(`DELETE  FROM vacation where ID=${id};`);
+    res.json({
+        msg: "OK"
+    })
 });
 
 // show vacation
@@ -43,27 +80,5 @@ router.delete('/deleteuser', async (req, res) => {
         msg: "OK"
     })
 });
-
-
-// router.get('/allvacation', async (req, res, next) => {
-//     const results = await pool.query(`SELECT appointmentNew.ID as ID,team.name as name,appointmentname,description,starttime,time,date FROM appointmentNew JOIN team 
-//     ON appointmentNew.teamname=team.ID;`);
-//     res.json(results);
-// });
-
-//insert data to appointmentNew
-// router.post('/insertData', async (req, res, next) => {   //id is automti  //  (MovieName,year,img,Category) from sql
-    // debugger;
-//     let queryStr = `INSERT INTO appointmentNew (teamname,appointmentname,description,starttime,time,date)  
-//     VALUES (${req.body.teamname},'${req.body.appointmentname}','${req.body.description}','${req.body.starttime}','${req.body.time}','${req.body.date}') `  //from client
-//     const result = await pool.query(queryStr);  //queryStr send to DB
-
-//     if(result.status=200) { 
-//         res.send(result); 
-//     }else{
-//        res.status(404).send('error'); 
-//     }
-    
-// });
 
 module.exports = router;
