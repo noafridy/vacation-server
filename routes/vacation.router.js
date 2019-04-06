@@ -12,11 +12,11 @@ var pool = mysql.createPool({
 });
 
 //update  vacation
-router.put('/updatevacation', async (req, res, next) => {
-    const id = req.query.id;   ////from client-> in the url?id
+router.put('/update/:id', async (req, res, next) => {
+    const id = req.params.id;   //after the : is the name of var
     var queryStr = (`UPDATE vacation 
     SET description='${req.body.description}',destination='${req.body.destination}',img='${req.body.img}',
-    date='${req.body.date}',price=${req.body.price},follow=${req.body.follow}
+    fromDate=${req.body.fromDate},toDate=${req.body.toDate},price=${req.body.price},follow=${req.body.follow}
     where ID=${id};`);
     const result = await pool.query(queryStr);
     if (result.status = 200) {
@@ -26,12 +26,13 @@ router.put('/updatevacation', async (req, res, next) => {
     }
 });
 
-//insert  vacation
-router.post('/insertvacation', async (req, res, next) => {
-    let queryStr = `INSERT INTO vacation (description,destination,img,date,price,follow)  
-    VALUES ('${req.body.description}','${req.body.destination}','${req.body.img}','${req.body.date}',${req.body.price},${req.body.follow}) `  //from client
+//add  vacation
+router.post('/add', async (req, res, next) => {
+    debugger
+    let queryStr = `INSERT INTO vacation (description,destination,img,fromDate,toDate,price)  
+    VALUES ('${req.body.description}','${req.body.destination}','${req.body.img}',${req.body.fromDate},${req.body.toDate},${req.body.price}) `  //from client
     const result = await pool.query(queryStr);  //queryStr send to DB
-
+debugger
     if (result.status = 200) {
         res.send(result);
     } else {
@@ -40,45 +41,19 @@ router.post('/insertvacation', async (req, res, next) => {
 });
 
 //delete vacation 
-router.delete('/deletevacation', async (req, res) => {
-    const id = req.query.id;   ////from client-> in the url?id
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;   //: is in parmas-> params is from url
     await pool.query(`DELETE  FROM vacation where ID=${id};`);
     res.json({
         msg: "OK"
     })
 });
 
-// show vacation
-router.get('/allvacation', async (req, res, next) => {
+// show all vacation
+router.get('/all', async (req, res, next) => {
     const results = await pool.query(`SELECT * FROM vacation;`);
     res.json(results);
 });
 
-//get data from users
-router.get('/allusers', async (req, res, next) => {
-    const queryStr = `SELECT * FROM users;`
-    const user = await pool.query(queryStr);
-    res.send(user);
-})
-
-//insert values to users  -> admin
-router.get('/insertteam', async (req, res) => {
-    // admin
-    await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Noa','Friedman','NoaF','@1234N','admin') `);
-    // users
-    await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Tal','Waser','Tal','12345','user') `);
-    await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Romi','Waser','Romi','%123W','user') `);
-    res.json({
-        msg: "OK"
-    })
-});
-
-//delete values to users
-router.delete('/deleteuser', async (req, res) => {
-    await pool.query(`DELETE FROM users WHERE  ID=5 `);
-    res.json({
-        msg: "OK"
-    })
-});
 
 module.exports = router;
