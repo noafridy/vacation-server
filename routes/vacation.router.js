@@ -32,8 +32,8 @@ router.post('/add', async (req, res, next) => {
     let queryStr = `INSERT INTO vacation (description,destination,img,fromDate,toDate,price)  
     VALUES ('${req.body.description}','${req.body.destination}','${req.body.img}',${req.body.fromDate},${req.body.toDate},${req.body.price}) `  //from client
     const result = await pool.query(queryStr);  //queryStr send to DB
-debugger
-    if (result.status = 200) {
+    debugger
+    if (result.status === 200) {
         res.send(result);
     } else {
         res.status(404).send('error');
@@ -43,10 +43,17 @@ debugger
 //delete vacation 
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;   //: is in parmas-> params is from url
-    await pool.query(`DELETE  FROM vacation where ID=${id};`);
-    res.json({
-        msg: "OK"
-    })
+    const result = await pool.query(`DELETE  FROM vacation where ID='${id}';`);
+    if (result) {
+        const result2 = await pool.query(`SELECT * FROM vacation`);
+        if (result2) {
+            res.send(result2);
+        } else {
+            res.status(404).send('error');
+        }
+    } else {
+        res.status(404).send('error');
+    }
 });
 
 // show all vacation

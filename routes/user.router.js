@@ -20,7 +20,8 @@ router.get('/:username/:password', async (req, res, next) => {
         const jsonResult = result[0];
         req.session.firstName = jsonResult.first_name ; //available only in server
         req.session.lastName = jsonResult.last_name ;
-        req.session.username = jsonResult.username ;        
+        req.session.username = jsonResult.username ;  
+        req.session.rol = jsonResult.rol ;       
         res.cookie('userInfo', JSON.stringify(req.session)); //כדי שיהיה זמין גם בצד לקוח נעביר לו קוקי 
         res.send(req.session);
     } else {
