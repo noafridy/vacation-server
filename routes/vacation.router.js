@@ -27,9 +27,9 @@ router.delete('/unFollw/:vacation_id/:username', async (req, res) => {
     const id = req.params.vacation_id;
     const result = await pool.query(`DELETE FROM user_vacation where vacation_id=${id} AND username='${username}'`);
     if (result) {
-        const result2 = await pool.query(`SELECT * FROM user_vacation`);
+        const result2 = await pool.query(`SELECT vacation_id FROM user_vacation WHERE username='${username}'`);
         if (result2) {
-            res.send(result2);
+            res.send(result2.map(item => item.vacation_id));
         } else {
             res.status(404).send('error');
         }
@@ -74,11 +74,13 @@ router.put('/update/:id', async (req, res, next) => {
     fromDate='${req.body.fromDate}',toDate='${req.body.toDate}',price=${req.body.price}
     where ID=${id}`);
     const result = await pool.query(queryStr);
-    if (result.status == 200) {
+    if (result) {
         const queryStr2 = `select * from vacation`;
         const result2 = await pool.query(queryStr2);
         if (result2) {
             res.send(result2);
+            // notify all clients that vecations changed, send the updated vecations data to all clients
+            global.socket_io.emit('vecations-updated', result2);  //emit -  השרת משדר המילת קוד שאפשר יהיה להאזין לה'
         } else {
             res.status(404).send('error');
         }
@@ -98,6 +100,7 @@ router.post('/add', async (req, res, next) => {
         const result2 = await pool.query(queryStr2);
         if (result2) {
             res.send(result2);
+            global.socket_io.emit('vecations-updated', result2);  //emit -  השרת משדר המילת קוד שאפשר יהיה להאזין לה'
         } else {
             res.status(404).send('error');
         }
@@ -110,10 +113,12 @@ router.post('/add', async (req, res, next) => {
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;   //: is in parmas-> params is from url
     const result = await pool.query(`DELETE  FROM vacation where ID='${id}';`);
+    const resultFollow = await pool.query(`DELETE  FROM user_vacation where vacation_id='${id}';`)
     if (result) {
         const result2 = await pool.query(`SELECT * FROM vacation`);
         if (result2) {
             res.send(result2);
+            global.socket_io.emit('vecations-updated', result2);  //emit -  השרת משדר המילת קוד שאפשר יהיה להאזין לה'
         } else {
             res.status(404).send('error');
         }

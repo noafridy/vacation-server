@@ -6,6 +6,8 @@ var session = require('express-session');
 var vacationRouter = require('./routes/vacation.router');  //need to changed the name
 var userRouter = require('./routes/user.router');  //need to changed the name
 
+var bodyParser = require('body-parser');
+
 var app = express();
 
 
@@ -16,7 +18,8 @@ app.use(session({
     cookie: { secure: false }  //http if its https it sohuled be true
 }));
 
-
+app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.urlencoded({limit: '50mb' , extended: true}))
 
 app.use(logger('dev'));
 app.use(express.json());

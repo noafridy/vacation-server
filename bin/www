@@ -27,6 +27,7 @@ var server = http.createServer(app);
 
 // socket - לוקח את השרת ויוצר דרך אחרת לתקשר עם צד לקוח - לקוח שולח מידע לשרת והשרת מתקשר עם שאר האנשים בצד לקוח שמחוברים לשרת
 const io = require('socket.io')(server, { origins: '*:*'});
+global.socket_io = io; // save the io object on the global object to make it available everywhere in server
 io.on('connection', client => {  //on -  connection השרת מאזין על מחרוזת שהגדרנו מראש 
   console.log('a user connected');  
   io.emit('server-message', 'client connected');  //emit -  השרת משדר המילת קוד שאפשר יהיה להאזין לה server-message'

@@ -13,10 +13,11 @@ var pool = mysql.createPool({
 
 // get data from user_vacation
 router.get('/:username/:password', async (req, res, next) => {
+    debugger
     const username = req.params.username;
     const password = req.params.password;
     const result = await pool.query(`SELECT * FROM users WHERE username='${username}'AND password='${password}' ;`);
-    if (result) {
+    if (result.length) {
         const jsonResult = result[0];
         req.session.firstName = jsonResult.first_name ; //available only in server
         req.session.lastName = jsonResult.last_name ;
@@ -25,6 +26,7 @@ router.get('/:username/:password', async (req, res, next) => {
         res.cookie('userInfo', JSON.stringify(req.session)); //כדי שיהיה זמין גם בצד לקוח נעביר לו קוקי 
         res.send(req.session);
     } else {
+        res.statusMessage = "There is a problem with login, please try again";
         res.status(404).send('error');
     }    
 });
