@@ -70,7 +70,7 @@ router.get('/myFollow/:username', async (req, res, next) => {
 router.put('/update/:id', async (req, res, next) => {
     const id = req.params.id;   //after the : is the name of var
     const queryStr = (`UPDATE vacation 
-    SET description='${req.body.description}',destination='${req.body.destination}',
+    SET img='${req.body.img}',description='${req.body.description}',destination='${req.body.destination}',
     fromDate='${req.body.fromDate}',toDate='${req.body.toDate}',price=${req.body.price}
     where ID=${id}`);
     const result = await pool.query(queryStr);
