@@ -1,15 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mysql = require('promise-mysql');
 
-//define a pool
-var pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'vacations_web',
-    connectionLimit: 10
-});
+const pool = global.pool;
 
 router.get('/:username/:password', async (req, res, next) => {
     debugger

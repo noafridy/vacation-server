@@ -3,13 +3,24 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session'); 
+var mysql = require('promise-mysql');
+var bodyParser = require('body-parser');
+
+//define a database pool
+var pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'vacations_web',
+    connectionLimit: 10
+});
+
+global.pool = pool;
+
 var vacationRouter = require('./routes/vacation.router');  
 var userRouter = require('./routes/user.router'); 
 
-var bodyParser = require('body-parser');
-
 var app = express();
-
 
 app.use(session({
     secret: 'dskPP Pdns jdnj',
