@@ -44,7 +44,7 @@ router.post('/add', async (req, res, next) => {
     let queryStrUsername = `SELECT * FROM users WHERE username='${username}';`
     const resultUsername  = await pool.query(queryStrUsername);   //הרצה של השיאלתא
     if (resultUsername.length) {
-        res.statusMessage = "The user is already exist in the system";
+        res.statusMessage = "The username is already exist in the system, please choose a different username";
         res.status(400).end();
     } else {
        let queryStr = `INSERT INTO users (first_name,last_name,username,password,rol) 
@@ -67,7 +67,9 @@ router.post('/add', async (req, res, next) => {
 //add values to users  -> admin
 router.post('/addAdmin', async (req, res) => {
     // admin
-    await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Noa','Friedman','NoaF','@1234N','admin') `);
+    // await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Noa','Friedman','NoaF','@1234N','admin') `);
+    await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Tal','W','Tal123','123','admin') `);
+
     // users
     // await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Tal','Waser','Tal','12345','user') `);
     // await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Romi','Waser','Romi','%123W','user') `);
