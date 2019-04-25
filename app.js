@@ -3,8 +3,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session'); 
-var vacationRouter = require('./routes/vacation.router');  //need to changed the name
-var userRouter = require('./routes/user.router');  //need to changed the name
+var vacationRouter = require('./routes/vacation.router');  
+var userRouter = require('./routes/user.router'); 
 
 var bodyParser = require('body-parser');
 
@@ -15,7 +15,7 @@ app.use(session({
     secret: 'dskPP Pdns jdnj',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }  //http if its https it sohuled be true
+    cookie: { secure: false } 
 }));
 
 app.use(bodyParser.json({limit: '50mb'}))
@@ -32,7 +32,6 @@ app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Headers", "content-type");
-    // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     next();
 });
