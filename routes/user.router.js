@@ -8,8 +8,8 @@ router.get('/:username/:password', async (req, res, next) => {
     const username = req.params.username;
     const password = req.params.password;
     const result = await pool.query(`SELECT * FROM users WHERE username='${username}'AND password='${password}' ;`);
-    if (result.length) {
-        const jsonResult = result[0];
+    if (result.rows.length > 0) {
+        const jsonResult = result.rows[0];
         req.session.firstName = jsonResult.first_name ; 
         req.session.lastName = jsonResult.last_name ;
         req.session.username = jsonResult.username ;  
