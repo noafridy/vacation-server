@@ -66,7 +66,7 @@ router.put('/update/:id', async (req, res, next) => {
         const result2 = await pool.query(queryStr2);
         if (result2) {
             res.send(result2);
-            global.socket_io.emit('vecations-updated', result2);  //emit -  השרת משדר המילת קוד שאפשר יהיה להאזין לה'
+            global.socket_io.emit('vecations-updated', result2);  
         } else {
             res.status(404).send('error');
         }
@@ -77,7 +77,7 @@ router.put('/update/:id', async (req, res, next) => {
 
 router.post('/add', async (req, res, next) => {
     let queryStr = `INSERT INTO vacation (description,destination,img,fromDate,toDate,price)  
-    VALUES ('${req.body.description}','${req.body.destination}','${req.body.img}','${req.body.fromDate}','${req.body.toDate}',${req.body.price}) `  //from client
+    VALUES ('${req.body.description}','${req.body.destination}','${req.body.img}','${req.body.fromDate}','${req.body.toDate}',${req.body.price}) ` 
     const result = await pool.query(queryStr);  
 
     if (result) {

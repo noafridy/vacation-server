@@ -54,7 +54,6 @@ router.post('/add', async (req, res, next) => {
 });
 
 router.post('/addAdmin', async (req, res) => {
-    // await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Noa','Friedman','NoaF','@1234N','admin') `);
     await pool.query(`INSERT INTO users (first_name,last_name,username,password,rol) VALUES ('Tal','W','Tal123','123','admin') `);
     res.json({
         msg: "OK"
